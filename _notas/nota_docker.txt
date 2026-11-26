@@ -1,0 +1,41 @@
+
+# docker-compose.yml
+
+Esse arquivo docker-compose.yml define uma aplicação composta por três serviços: postgres,
+ backend e frontend, e cria uma rede chamada mynetwork. Vou explicar cada parte em detalhes:
+
+Services:
+Postgres:
+image: postgres:latest: Esse serviço utiliza a imagem mais recente do PostgreSQL disponível no Docker Hub.
+volumes: Mapeia o diretório /var/lib/postgresql/data dentro do contêiner do PostgreSQL para um volume chamado postgres_data no sistema hospedeiro. Isso permite que os dados do banco de dados persistam mesmo quando o contêiner é desligado.
+environment: Define variáveis de ambiente para configurar o banco de dados PostgreSQL, como nome do banco de dados (POSTGRES_DB), nome de usuário (POSTGRES_USER) e senha (POSTGRES_PASSWORD).
+networks: Define que este serviço está na rede chamada mynetwork.
+
+Backend:
+build: Especifica que o Docker deve construir uma imagem para esse serviço, usando um Dockerfile 
+localizado no diretório ./backend.
+volumes: Mapeia o diretório ./backend (no sistema hospedeiro) para o diretório /app dentro do contêiner.
+ Isso permite que as alterações no código fonte do backend sejam refletidas no contêiner em tempo real.
+environment: Define a variável de ambiente DATABASE_URL, que especifica a URL de conexão com o banco de 
+dados PostgreSQL.
+ports: Mapeia a porta 8000 do sistema hospedeiro para a porta 8000 do contêiner, permitindo que o serviço seja acessado através da porta 8000.
+depends_on: Indica que este serviço depende do serviço postgres, garantindo que o banco de dados esteja
+ pronto antes que o backend seja iniciado.
+networks: Também define que este serviço está na rede mynetwork.
+Frontend:
+build: Similar ao backend, especifica que o Docker deve construir uma imagem para este serviço, usando
+ um Dockerfile localizado no diretório ./frontend.
+
+volumes: Mapeia o diretório ./frontend (no sistema hospedeiro) para o diretório /app dentro do contêiner,
+ permitindo alterações em tempo real.
+ports: Mapeia a porta 8501 do sistema hospedeiro para a porta 8501 do contêiner, permitindo acesso ao 
+frontend através da porta 8501.
+
+networks: Define que este serviço também está na rede mynetwork.
+Networks:
+mynetwork: Define uma rede personalizada para os serviços se comunicarem entre si.
+
+Volumes:
+postgres_data: Define um volume para armazenar os dados do banco de dados PostgreSQL.
+Comando docker-compose up:
+Quando você executa docker-compose up, o Docker Compose lerá o arquivo docker-compose.yml, criará os serviços conforme as definições especificadas e os iniciará. Isso significa que os contêineres para o banco de dados PostgreSQL, o backend e o frontend serão criados e conectados à rede mynetwork. O banco de dados será configurado com os detalhes fornecidos (nome do banco de dados, usuário e senha), e as imagens para os serviços de backend e frontend serão construídas a partir dos Dockerfiles fornecidos. Uma vez iniciados, você poderá acessar o backend através de http://localhost:8000 e o frontend através de http://localhost:8501. Os dados do banco de dados serão persistidos no volume postgres_data.
