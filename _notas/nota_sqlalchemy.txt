@@ -1,0 +1,54 @@
+SQLALCHEMY
+
+create_engine
+# Cria conexão com banco
+
+sessionmaker
+# Cria sessões para executar consultas
+
+declarative_base
+# Classe base para todas as tabelas
+
+engine
+# Ponte entre aplicação e banco
+
+SessionLocal
+# Conversa com banco
+
+Base
+# Pai de todas as tabelas (models)
+
+DATABASE.PY
+
+create_engine()
+# Conecta ao banco
+
+SessionLocal
+# Cria sessão com banco
+
+Base = declarative_base()
+# Classe mãe dos modelos
+
+get_db()
+# Fornece conexão para FastAPI
+
+yield db
+# Entrega a sessão
+
+db.close()
+# Fecha conexão
+
+#Fluxo mental
+
+
+PostgreSQL
+↓
+create_engine
+↓
+SessionLocal
+↓
+get_db
+↓
+FastAPI
+↓
+CRUD
