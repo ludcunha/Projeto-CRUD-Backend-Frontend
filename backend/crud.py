@@ -18,20 +18,20 @@ def get_products(db: Session):
 
 
 def create_product(db: Session, product: ProductCreate):
-    db_product = ProductModel(**product.model_dump())
-    db.add(db_product)
-    db.commit()
+    db_product = ProductModel(**product.model_dump()) #transformar minha view para ORM
+    db.add(db_product) #adicionar na tabela
+    db.commit() #comitar na minha tabela
     db.refresh(db_product)
-    return db_product
+    return db_product #retonrar oara o usuario o ID criado
 
-
+# deletar where id=1
 def delete_product(db: Session, product_id: int):
     db_product = db.query(ProductModel).filter(ProductModel.id == product_id).first()
     db.delete(db_product)
     db.commit()
     return db_product
 
-
+#update
 def update_product(db: Session, product_id: int, product: ProductUpdate):
     db_product = db.query(ProductModel).filter(ProductModel.id == product_id).first()
 
