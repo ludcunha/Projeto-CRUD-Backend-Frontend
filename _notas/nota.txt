@@ -1,0 +1,99 @@
+O router.py recebe a requisição.
+Chama uma função do crud.py.
+O crud.py busca os dados no banco.
+O resultado volta para o router.py.
+A API responde ao cliente.
+
+Em projetos maiores, geralmente existe também um service.py:
+
+Plain Text
+router.py → recebe requisições
+service.py → regras de negócio
+crud.py → acesso ao banco
+models.py → tabelas
+schemas.py → validação dos dados
+
+Essa separação deixa o código mais organizado e fácil de manter.
+
+
+#####
+
+Fluxo:
+
+Plain Text
+Request
+{
+"name": "João Santos"
+}
+ 
+↓
+ 
+router.py
+ 
+↓
+ 
+service.py
+ 
+↓
+ 
+repository.py
+ 
+↓
+ 
+UPDATE users
+SET name='João Santos'
+WHERE id=1
+ 
+↓
+ 
+Response
+{
+"id": 1,
+"name": "João Santos",
+"email": "joao@email.com"
+}
+inclua no resumo rapido a resposta
+
+Claro. O resumo rápido fica mais completo assim:
+
+Ação	Método	O que envia (Request)	O que recebe (Response)
+Create	POST	Dados do novo registro	Objeto criado com ID gerado
+Read	GET	ID ou filtros na URL	Objeto encontrado
+Update (completo)	PUT	Objeto completo atualizado	Objeto atualizado
+Update (parcial)	PATCH	Apenas os campos alterados	Objeto atualizado
+Delete	DELETE	ID do registro	Mensagem de sucesso ou 204 No Content
+
+
+##Exemplos
+
+Ação	Request	Response
+POST /users	{ "name": "João" }	{ "id": 1, "name": "João" }
+GET /users/1	ID na URL	{ "id": 1, "name": "João" }
+PUT /users/1	{ "name": "João Silva" }	{ "id": 1, "name": "João Silva" }
+PATCH /users/1	{ "name": "João Santos" }	{ "id": 1, "name": "João Santos" }
+DELETE /users/1	ID na URL	{ "message": "Usuário removido com sucesso" }
+
+##Visão prática do Router
+
+@router.post("/")
+# recebe: UserCreate
+# retorna: UserResponse
+ 
+@router.get("/{id}")
+# recebe: id
+# retorna: UserResponse
+ 
+@router.put("/{id}")
+# recebe: id + UserUpdate
+# retorna: UserResponse
+ 
+@router.patch("/{id}")
+# recebe: id + campos alterados
+# retorna: UserResponse
+ 
+@router.delete("/{id}")
+# recebe: id
+# retorna: mensagem ou 204
+
+Uma boa prática é que o POST, GET, PUT e PATCH retornem o objeto no schema de resposta (UserResponse),
+ enquanto o DELETE retorna apenas uma confirmação.
